@@ -24,7 +24,7 @@ def read_temp_raw(device_file):
     return lines
 
 def read_temp(device_file):
-        lines = read_temp_raw()
+        lines = read_temp_raw(device_file)
         while lines[0].strip()[-3:] != 'YES':
             time.sleep(0.2)
             lines = read_temp_raw()
@@ -35,6 +35,6 @@ def read_temp(device_file):
             return temp_c
 
 while True:
-    foreach(sensors as sensor):
-	   print(device.name + ':' + read_temp(base_dir + sensor.device + device_file))
-	time.sleep(1)
+    for sensor in sensors:
+        print(sensor['name'] + ':' + str(read_temp(base_dir + sensor['device'] + device_file)))
+    time.sleep(1)
