@@ -3,6 +3,9 @@
 import os
 import glob
 import time
+import boto3
+from datetime import datetime
+import sys, getopt
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -16,6 +19,22 @@ sensors = [
 
 base_dir = '/sys/bus/w1/devices/'
 device_file = '/w1_slave'
+
+client = boto3.client('sdb')
+
+def init():
+    client.create_domain(
+        DomainName='pilp.logs'
+    )
+
+def store_data(data):
+    client.put_attributes(
+        DomainName='pilp.logs',
+        ItemName=data.time,
+        Attributes=[
+            data,
+        ]
+    )
 
 def read_temp_raw(device_file):
     f = open(device_file, 'r')
@@ -34,7 +53,23 @@ def read_temp(device_file):
             temp_c = float(temp_string) / 1000.0
             return temp_c
 
-while True:
+def log_sensors():
+    data = {
+        time: datetime.today()
+    }
     for sensor in sensors:
-        print(sensor['name'] + ':' + str(read_temp(base_dir + sensor['device'] + device_file)))
-    time.sleep(1)
+        data[sensor['name']] = read_temp(base_dir + sensor['device'] + device_file)
+
+    store_data(data)
+
+def main(argv = None):
+    if argv is None:
+        argv = sys.argv
+
+    if argv[1] == 'init':
+        init()
+    else:
+        log_sensors()
+
+if __name__ == "__main__":
+    main()
