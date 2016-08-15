@@ -6,6 +6,7 @@ import time
 import boto3
 from datetime import datetime
 import sys, getopt
+from pprint import pprint
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -42,6 +43,16 @@ def store_data(data):
         Attributes=attributes
     )
 
+def get_newest():
+    result = client.select(SelectExpression="select * from `pilp.logs` where itemName() like '2016%' order by itemName() desc limit 1")
+    pprint(result['Items'])
+
+def get_meta():
+    result = client.domain_metadata(
+        DomainName='pilp.logs'
+    )
+    pprint(result)
+
 def read_temp_raw(device_file):
     f = open(device_file, 'r')
     lines = f.readlines()
@@ -75,6 +86,10 @@ def main(argv = None):
     try:
         if argv[1] == 'init':
             init()
+        elif argv[1] == 'show':
+            get_newest()
+        elif argv[1] == 'meta':
+            get_meta()
         else:
             log_sensors()
     except IndexError:
