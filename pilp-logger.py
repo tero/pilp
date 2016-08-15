@@ -66,9 +66,12 @@ def main(argv = None):
     if argv is None:
         argv = sys.argv
 
-    if argv[1] == 'init':
-        init()
-    else:
+    try:
+        if argv[1] == 'init':
+            init()
+        else:
+            log_sensors()
+    catch IndexError:
         log_sensors()
 
 if __name__ == "__main__":
