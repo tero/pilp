@@ -55,7 +55,7 @@ def read_temp(device_file):
 
 def log_sensors():
     data = {
-        time: datetime.today()
+        'time': datetime.today()
     }
     for sensor in sensors:
         data[sensor['name']] = read_temp(base_dir + sensor['device'] + device_file)
