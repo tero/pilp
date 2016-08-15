@@ -30,7 +30,7 @@ def init():
 def store_data(data):
     attributes = []
     for key, value in data.iteritems():
-        attributes.push({
+        attributes.append({
             'Name': key,
             'Value': value.isoformat() if type(value) is datetime else value,
             'Replace': True
@@ -48,7 +48,7 @@ def read_temp_raw(device_file):
     f.close()
     return lines
 
-def read_temp(device_file):
+def read_temp(device_file, return_raw=False):
         lines = read_temp_raw(device_file)
         while lines[0].strip()[-3:] != 'YES':
             time.sleep(0.2)
@@ -57,14 +57,14 @@ def read_temp(device_file):
         if equals_pos != -1:
             temp_string = lines[1][equals_pos+2:]
             temp_c = float(temp_string) / 1000.0
-            return temp_c
+            return temp_string if return_raw else temp_c
 
 def log_sensors():
     data = {
         'time': datetime.today()
     }
     for sensor in sensors:
-        data[sensor['name']] = read_temp(base_dir + sensor['device'] + device_file)
+        data[sensor['name']] = read_temp(base_dir + sensor['device'] + device_file, True)
 
     store_data(data)
 
