@@ -32,13 +32,13 @@ def store_data(data):
     for key, value in data.iteritems()
         attributes.push({
             'Name': key,
-            'Value': value,
+            'Value': value.isoformat() if type(value) is datetime else value,
             'Replace': True
         })
-        
+
     client.put_attributes(
         DomainName='pilp.logs',
-        ItemName=data['time'],
+        ItemName=data['time'].isoformat(),
         Attributes=attributes
     )
 
