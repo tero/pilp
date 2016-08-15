@@ -11,10 +11,10 @@ os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
 sensors = [
-    {'device': '28-0315510034ff', 'name': 'Menovesi'},
-    {'device': '28-031550fff1ff', 'name': 'Höyrystin'},
-    {'device': '28-0315511b62ff', 'name': 'Kattila'},
-    {'device': '28-03155106f8ff', 'name': 'Jäteilma'},
+    {'device': '28-0315510034ff', 'name': 'outgoing water'}, #menovesi
+    {'device': '28-031550fff1ff', 'name': 'evaporator'}, #höyrystin
+    {'device': '28-0315511b62ff', 'name': 'boiler'}, #kattila
+    {'device': '28-03155106f8ff', 'name': 'exhaust'}, #jäteilma
 ]
 
 base_dir = '/sys/bus/w1/devices/'
@@ -30,7 +30,7 @@ def init():
 def store_data(data):
     client.put_attributes(
         DomainName='pilp.logs',
-        ItemName=data.time,
+        ItemName=data['time'],
         Attributes=[
             data,
         ]
@@ -71,7 +71,7 @@ def main(argv = None):
             init()
         else:
             log_sensors()
-    catch IndexError:
+    except IndexError:
         log_sensors()
 
 if __name__ == "__main__":
