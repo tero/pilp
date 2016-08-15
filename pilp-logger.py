@@ -28,12 +28,18 @@ def init():
     )
 
 def store_data(data):
+    attributes = []
+    for key, value in data.iteritems()
+        attributes.push({
+            'Name': key,
+            'Value': value,
+            'Replace': True
+        })
+        
     client.put_attributes(
         DomainName='pilp.logs',
         ItemName=data['time'],
-        Attributes=[
-            data,
-        ]
+        Attributes=attributes
     )
 
 def read_temp_raw(device_file):
