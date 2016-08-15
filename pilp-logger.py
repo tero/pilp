@@ -29,7 +29,7 @@ def init():
 
 def store_data(data):
     attributes = []
-    for key, value in data.iteritems()
+    for key, value in data.iteritems():
         attributes.push({
             'Name': key,
             'Value': value.isoformat() if type(value) is datetime else value,
