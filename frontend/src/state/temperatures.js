@@ -22,11 +22,17 @@ const temperatureState = State('temperatures', {
   receiveTemperatureHistory: (state, payload) => {
     const history = payload.map((row) => {
       return row.Attributes.map((attribute) => {
-        return {[attribute.Name]: attribute.Value}
+        return {[attribute.Name]: new Array(attribute.Value)}
       })
       .reduce((prev, current) => ({...prev, ...current}))
     })
-    console.log(history)
+    .reduce((prev, current) => {
+      let result = Object.keys(current).map((key) => {
+        prev[key].push(...current[key])
+        return prev
+      })
+      return result.pop()
+    })
     return {history, loading: false}
   }
 })
