@@ -1,11 +1,12 @@
 import { Component } from 'jumpsuit'
-import { getTemperatures } from 'state/temperatures'
+import { getCurrentTemperatures, getTemperatureHistory } from 'state/temperatures'
 
 export default Component({
   render () {
     return (
       <div className='temperatures'>
-        <button onClick={getTemperatures}>Fetch</button>
+        <button onClick={getCurrentTemperatures}>Fetch</button>
+        <button onClick={getTemperatureHistory}>History</button>
         {this.props.temperatures[0].Attributes.map((sensor) =>
             <div>{sensor.Name}: {sensor.Value}</div>
         )}
@@ -14,5 +15,5 @@ export default Component({
   }
 }, (state) => ({
   loading: state.temperatures.loading,
-  temperatures: state.temperatures.temperatures,
+  temperatures: state.temperatures.currentTemperatures,
 }))
