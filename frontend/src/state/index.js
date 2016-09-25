@@ -1,3 +1,4 @@
 import github from './github'
+import temperatures from './temperatures'
 
-export default { github }
+export default { github, temperatures }

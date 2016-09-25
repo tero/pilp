@@ -3,12 +3,12 @@ import { Render, Router, Route, IndexRoute } from 'jumpsuit'
 import state from 'state/index'
 /* screens */
 import App from 'screens/index'
-import Github from 'screens/github'
+import Temperatures from 'screens/temperatures'
 
 Render(state, (
   <Router>
     <Route path='/' component={App}>
-      <IndexRoute component={Github} />
+      <IndexRoute component={Temperatures} />
     </Route>
   </Router>
 ))
